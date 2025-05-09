@@ -119,7 +119,7 @@ export default function App() {
       type: 'argument',
       position: { x: 100, y: 100 },
       data: {
-        text: 'New Claim',
+        text: type === 'value' ? 'New Value' : type === 'policy' ? 'New Policy' : 'New Factual',
         type,
         belief: 0.5,
         author: 'User',
@@ -168,7 +168,7 @@ export default function App() {
               onMouseOver={e => (e.currentTarget.style.background = '#1d4ed8')}
               onMouseOut={e => (e.currentTarget.style.background = '#2563eb')}
             >
-              Add Factual Claim
+              Add Factual
             </button>
             <button
               onClick={() => addNewNode('policy')}
@@ -176,7 +176,7 @@ export default function App() {
               onMouseOver={e => (e.currentTarget.style.background = '#16a34a')}
               onMouseOut={e => (e.currentTarget.style.background = '#22c55e')}
             >
-              Add Policy Claim
+              Add Policy
             </button>
             <button
               onClick={() => addNewNode('value')}
@@ -184,7 +184,7 @@ export default function App() {
               onMouseOver={e => (e.currentTarget.style.background = '#701a75')}
               onMouseOut={e => (e.currentTarget.style.background = '#a21caf')}
             >
-              Add Value Claim
+              Add Value
             </button>
             {selectedNode && (
               <button

@@ -48,7 +48,7 @@ export function ArgumentNode({ data, id }: NodeProps<ArgumentNode>) {
                 >
                     <option value="factual">Factual</option>
                     <option value="policy">Policy</option>
-                    <option value="value">Claim</option>
+                    <option value="value">Value</option>
                 </select>
             </div>
 
