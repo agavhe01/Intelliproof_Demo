@@ -1,23 +1,10 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
-import { type ArgumentNode, type ClaimType } from './types';
+import { type ArgumentNode } from './types';
 
 export function ArgumentNode({ data, id }: NodeProps<ArgumentNode>) {
-    const getTypeColor = (type: ClaimType) => {
-        switch (type) {
-            case 'factual':
-                return 'bg-blue-100 border-blue-500';
-            case 'policy':
-                return 'bg-green-100 border-green-500';
-            case 'value':
-                return 'bg-purple-100 border-purple-500';
-            default:
-                return 'bg-gray-100 border-gray-500';
-        }
-    };
-
     return (
-        <div className={`p-4 rounded-lg border-2 ${getTypeColor(data.type)} min-w-[200px]`}>
-            <div className="font-medium mb-2">
+        <div className={`argument-node ${data.type}`}>
+            <div style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>
                 <input
                     type="text"
                     value={data.text}
@@ -27,11 +14,20 @@ export function ArgumentNode({ data, id }: NodeProps<ArgumentNode>) {
                         });
                         window.dispatchEvent(event);
                     }}
-                    className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0"
+                    style={{
+                        width: '100%',
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'inherit',
+                        fontWeight: 600,
+                        fontSize: '1.1rem',
+                        outline: 'none',
+                        padding: 0,
+                    }}
                 />
             </div>
 
-            <div className="text-sm text-gray-600 mb-2">
+            <div style={{ marginBottom: '0.5rem' }}>
                 <select
                     value={data.type}
                     onChange={(e) => {
@@ -40,17 +36,25 @@ export function ArgumentNode({ data, id }: NodeProps<ArgumentNode>) {
                         });
                         window.dispatchEvent(event);
                     }}
-                    className="bg-transparent border-none focus:outline-none focus:ring-0 p-0"
+                    style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'inherit',
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        outline: 'none',
+                        padding: 0,
+                    }}
                 >
                     <option value="factual">Factual</option>
                     <option value="policy">Policy</option>
-                    <option value="value">Value</option>
+                    <option value="value">Claim</option>
                 </select>
             </div>
 
             {data.belief !== null && (
-                <div className="mb-2">
-                    <label className="text-sm text-gray-600">Belief:</label>
+                <div style={{ marginBottom: '0.5rem' }}>
+                    <label style={{ fontSize: '0.85em' }}>Belief:</label>
                     <input
                         type="range"
                         min="0"
@@ -62,15 +66,15 @@ export function ArgumentNode({ data, id }: NodeProps<ArgumentNode>) {
                             });
                             window.dispatchEvent(event);
                         }}
-                        className="w-full"
+                        style={{ width: '100%' }}
                     />
-                    <div className="text-sm text-gray-500 text-right">
+                    <div style={{ fontSize: '0.85em', textAlign: 'right' }}>
                         {Math.round(data.belief * 100)}%
                     </div>
                 </div>
             )}
 
-            <div className="text-xs text-gray-500">
+            <div style={{ fontSize: '0.85em', opacity: 0.8, display: 'flex', alignItems: 'center', gap: '0.5em' }}>
                 <input
                     type="text"
                     value={data.author}
@@ -80,14 +84,22 @@ export function ArgumentNode({ data, id }: NodeProps<ArgumentNode>) {
                         });
                         window.dispatchEvent(event);
                     }}
-                    className="w-full bg-transparent border-none focus:outline-none focus:ring-0 p-0 text-xs"
+                    style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'inherit',
+                        fontSize: '0.85em',
+                        outline: 'none',
+                        padding: 0,
+                        width: 'auto',
+                    }}
                     placeholder="Author"
                 />
                 • {new Date(data.createdAt).toLocaleDateString()}
             </div>
 
-            <Handle type="source" position={Position.Bottom} className="w-3 h-3 bg-gray-400" />
-            <Handle type="target" position={Position.Top} className="w-3 h-3 bg-gray-400" />
+            <Handle type="source" position={Position.Bottom} style={{ width: 12, height: 12, background: '#e5e7eb' }} />
+            <Handle type="target" position={Position.Top} style={{ width: 12, height: 12, background: '#e5e7eb' }} />
         </div>
     );
 } 

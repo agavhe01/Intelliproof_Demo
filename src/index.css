@@ -14,13 +14,11 @@ body,
 /* Custom node styles */
 .react-flow__node {
   padding: 0;
-  border-radius: 0.5rem;
+
   width: auto;
   font-size: 0.875rem;
   color: #1f2937;
   text-align: left;
-  border-width: 2px;
-  border-style: solid;
   background: white;
 }
 
@@ -59,4 +57,35 @@ body,
 
 .react-flow__handle:hover {
   background: #4b5563;
+}
+
+/* Add these to your index.css */
+.argument-node {
+  border-radius: 1rem;
+  border-width: 1px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  min-width: 220px;
+  padding: 1rem;
+  color: #ffffff;
+  font-family: inherit;
+}
+
+.argument-node.factual {
+  background: #15803d;
+  border-color: #4ade80;
+}
+
+.argument-node.policy {
+  background: #6d28d9;
+  border-color: #a78bfa;
+}
+
+.argument-node.value {
+  background: #1d4ed8;
+  border-color: #60a5fa;
+}
+
+.argument-node,
+.argument-node * {
+  color: #fff !important;
 }
