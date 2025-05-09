@@ -10,3 +10,53 @@ body,
   height: 100%;
   margin: 0;
 }
+
+/* Custom node styles */
+.react-flow__node {
+  padding: 0;
+  border-radius: 0.5rem;
+  width: auto;
+  font-size: 0.875rem;
+  color: #1f2937;
+  text-align: left;
+  border-width: 2px;
+  border-style: solid;
+  background: white;
+}
+
+.react-flow__node:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Custom edge styles */
+.react-flow__edge-path {
+  stroke-width: 2;
+}
+
+.react-flow__edge-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Controls and minimap styles */
+.react-flow__controls {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  border-radius: 0.5rem;
+}
+
+.react-flow__minimap {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Handle styles */
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background: #6b7280;
+  border: 2px solid white;
+}
+
+.react-flow__handle:hover {
+  background: #4b5563;
+}
