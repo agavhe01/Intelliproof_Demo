@@ -17,6 +17,10 @@ import '@xyflow/react/dist/style.css';
 import { ArgumentNode } from './nodes/ArgumentNode';
 import { ArgumentEdge } from './edges/ArgumentEdge';
 import { type ArgumentNode as ArgumentNodeType, type ArgumentEdge as ArgumentEdgeType, type ClaimType } from './nodes/types';
+import { SidebarLabel } from './components/SidebarLabel';
+import { StyledInput } from './components/StyledInput';
+import { RangeInput } from './components/RangeInput';
+import { StyledSelect } from './components/StyledSelect';
 
 // Example initial nodes
 const initialNodes: ArgumentNodeType[] = [
@@ -243,7 +247,7 @@ export default function App() {
         {selectedNode && (
           <div style={{ marginTop: 24 }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.2rem', marginBottom: 16, color: '#c7d2fe' }}>Node Details</h2>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>ID
+            <SidebarLabel>ID
               <div style={{
                 background: '#181829',
                 padding: '8px 12px',
@@ -256,61 +260,11 @@ export default function App() {
               }}>
                 {selectedNode.id}
               </div>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Text
-              <div style={{
-                background: '#181829',
-                padding: '8px 12px',
-                borderRadius: 6,
-                marginTop: 4,
-                marginBottom: 16,
-                border: '1px solid #475569',
-                fontSize: '0.9em',
-                color: '#a5b4fc'
-              }}>
-                <input
-                  type="text"
-                  value={selectedNode.data.text}
-                  onChange={e => {
-                    const newText = e.target.value;
-                    setNodes((nds) =>
-                      nds.map((node) =>
-                        node.id === selectedNode.id
-                          ? {
-                            ...node,
-                            data: {
-                              ...node.data,
-                              text: newText,
-                            },
-                          }
-                          : node
-                      )
-                    );
-                    setSelectedNode(prev => prev ? {
-                      ...prev,
-                      data: {
-                        ...prev.data,
-                        text: newText,
-                      },
-                    } : null);
-                  }}
-                  style={{
-                    width: '100%',
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'inherit',
-                    fontSize: 'inherit',
-                    outline: 'none',
-                    padding: 0,
-                  }}
-                />
-              </div>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Type
-              <select
-                value={selectedNode.data.type}
-                onChange={e => {
-                  const newType = e.target.value as ClaimType;
+            </SidebarLabel>
+            <SidebarLabel>Text
+              <StyledInput
+                value={selectedNode.data.text}
+                onChange={newText => {
                   setNodes((nds) =>
                     nds.map((node) =>
                       node.id === selectedNode.id
@@ -318,7 +272,7 @@ export default function App() {
                           ...node,
                           data: {
                             ...node.data,
-                            type: newType,
+                            text: newText,
                           },
                         }
                         : node
@@ -328,25 +282,49 @@ export default function App() {
                     ...prev,
                     data: {
                       ...prev.data,
-                      type: newType,
+                      text: newText,
                     },
                   } : null);
                 }}
-                style={{ width: '100%', marginTop: 4, marginBottom: 16, padding: 8, borderRadius: 6, border: '1px solid #475569', background: '#181829', color: '#fff', fontSize: '1rem' }}
-              >
-                <option value="factual">Factual</option>
-                <option value="policy">Policy</option>
-                <option value="value">Value</option>
-              </select>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Belief
-              <input
-                type="range"
-                min="0"
-                max="100"
+              />
+            </SidebarLabel>
+            <SidebarLabel>Type
+              <StyledSelect
+                value={selectedNode.data.type}
+                onChange={newType => {
+                  setNodes((nds) =>
+                    nds.map((node) =>
+                      node.id === selectedNode.id
+                        ? {
+                          ...node,
+                          data: {
+                            ...node.data,
+                            type: newType as ClaimType,
+                          },
+                        }
+                        : node
+                    )
+                  );
+                  setSelectedNode(prev => prev ? {
+                    ...prev,
+                    data: {
+                      ...prev.data,
+                      type: newType as ClaimType,
+                    },
+                  } : null);
+                }}
+                options={[
+                  { value: 'factual', label: 'Factual' },
+                  { value: 'policy', label: 'Policy' },
+                  { value: 'value', label: 'Value' },
+                ]}
+              />
+            </SidebarLabel>
+            <SidebarLabel>Belief
+              <RangeInput
                 value={selectedNode.data.belief !== null ? selectedNode.data.belief * 100 : 50}
-                onChange={e => {
-                  const newBelief = parseInt(e.target.value) / 100;
+                onChange={newValue => {
+                  const newBelief = newValue / 100;
                   setNodes((nds) =>
                     nds.map((node) =>
                       node.id === selectedNode.id
@@ -368,61 +346,35 @@ export default function App() {
                     },
                   } : null);
                 }}
-                style={{ width: '100%' }}
               />
-              <div style={{ fontSize: '0.95em', textAlign: 'right', color: '#c7d2fe' }}>
-                {selectedNode.data.belief !== null ? Math.round(selectedNode.data.belief * 100) : 50}%
-              </div>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Author
-              <div style={{
-                background: '#181829',
-                padding: '8px 12px',
-                borderRadius: 6,
-                marginTop: 4,
-                marginBottom: 16,
-                border: '1px solid #475569',
-                fontSize: '0.9em',
-                color: '#a5b4fc'
-              }}>
-                <input
-                  type="text"
-                  value={selectedNode.data.author}
-                  onChange={e => {
-                    const newAuthor = e.target.value;
-                    setNodes((nds) =>
-                      nds.map((node) =>
-                        node.id === selectedNode.id
-                          ? {
-                            ...node,
-                            data: {
-                              ...node.data,
-                              author: newAuthor,
-                            },
-                          }
-                          : node
-                      )
-                    );
-                    setSelectedNode(prev => prev ? {
-                      ...prev,
-                      data: {
-                        ...prev.data,
-                        author: newAuthor,
-                      },
-                    } : null);
-                  }}
-                  style={{
-                    width: '100%',
-                    background: 'transparent',
-                    border: 'none',
-                    color: 'inherit',
-                    fontSize: 'inherit',
-                    outline: 'none',
-                    padding: 0,
-                  }}
-                />
-              </div>
-            </label>
+            </SidebarLabel>
+            <SidebarLabel>Author
+              <StyledInput
+                value={selectedNode.data.author}
+                onChange={newAuthor => {
+                  setNodes((nds) =>
+                    nds.map((node) =>
+                      node.id === selectedNode.id
+                        ? {
+                          ...node,
+                          data: {
+                            ...node.data,
+                            author: newAuthor,
+                          },
+                        }
+                        : node
+                    )
+                  );
+                  setSelectedNode(prev => prev ? {
+                    ...prev,
+                    data: {
+                      ...prev.data,
+                      author: newAuthor,
+                    },
+                  } : null);
+                }}
+              />
+            </SidebarLabel>
             <div style={{ fontSize: '0.95em', color: '#a5b4fc', marginTop: 8 }}>
               Created: {new Date(selectedNode.data.createdAt).toLocaleString()}
             </div>
@@ -432,7 +384,7 @@ export default function App() {
         {selectedEdge && (
           <div style={{ marginTop: 24 }}>
             <h2 style={{ fontWeight: 700, fontSize: '1.2rem', marginBottom: 16, color: '#c7d2fe' }}>Edge Details</h2>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>ID
+            <SidebarLabel>ID
               <div style={{
                 background: '#181829',
                 padding: '8px 12px',
@@ -445,15 +397,12 @@ export default function App() {
               }}>
                 {selectedEdge.id}
               </div>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Weight
-              <input
-                type="range"
-                min="-100"
-                max="100"
+            </SidebarLabel>
+            <SidebarLabel>Weight
+              <RangeInput
                 value={selectedEdge.weight * 100}
-                onChange={e => {
-                  const newWeight = parseInt(e.target.value) / 100;
+                onChange={newValue => {
+                  const newWeight = newValue / 100;
                   setEdges((eds) =>
                     eds.map((edge) =>
                       edge.id === selectedEdge.id
@@ -466,13 +415,11 @@ export default function App() {
                   );
                   setSelectedEdge(prev => prev ? { ...prev, weight: newWeight } : null);
                 }}
-                style={{ width: '100%' }}
+                min={-100}
+                max={100}
               />
-              <div style={{ fontSize: '0.95em', textAlign: 'right', color: '#c7d2fe' }}>
-                {selectedEdge.weight > 0 ? '+' : ''}{Math.round(selectedEdge.weight * 100)}%
-              </div>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Source Node
+            </SidebarLabel>
+            <SidebarLabel>Source Node
               <div style={{
                 background: '#181829',
                 padding: '8px 12px',
@@ -485,8 +432,8 @@ export default function App() {
               }}>
                 {selectedEdge.source}
               </div>
-            </label>
-            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Target Node
+            </SidebarLabel>
+            <SidebarLabel>Target Node
               <div style={{
                 background: '#181829',
                 padding: '8px 12px',
@@ -499,7 +446,7 @@ export default function App() {
               }}>
                 {selectedEdge.target}
               </div>
-            </label>
+            </SidebarLabel>
           </div>
         )}
       </div>
