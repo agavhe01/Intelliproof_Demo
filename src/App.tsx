@@ -140,35 +140,134 @@ export default function App() {
   }, [selectedNode, setNodes, setEdges]);
 
   return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <div className="absolute top-4 left-4 z-10 flex gap-2">
-        <button
-          onClick={() => addNewNode('factual')}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Add Factual Claim
-        </button>
-        <button
-          onClick={() => addNewNode('policy')}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          Add Policy Claim
-        </button>
-        <button
-          onClick={() => addNewNode('value')}
-          className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600"
-        >
-          Add Value Claim
-        </button>
+    <div style={{ width: '100vw', height: '100vh', position: 'relative' }}>
+      {/* Sidebar: always present, styled dark, with controls at top */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          height: '100vh',
+          width: 360,
+          background: '#23213a',
+          color: '#fff',
+          boxShadow: '-2px 0 16px rgba(0,0,0,0.18)',
+          zIndex: 20,
+          padding: '2rem 1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '2rem',
+        }}
+      >
+        <div>
+          <h1 style={{ fontWeight: 800, fontSize: '1.5rem', letterSpacing: 0.5, marginBottom: 18 }}>Controls</h1>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <button
+              onClick={() => addNewNode('factual')}
+              style={{ background: '#2563eb', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 0', fontWeight: 600, fontSize: '1rem', marginBottom: 4, cursor: 'pointer', transition: 'background 0.2s' }}
+              onMouseOver={e => (e.currentTarget.style.background = '#1d4ed8')}
+              onMouseOut={e => (e.currentTarget.style.background = '#2563eb')}
+            >
+              Add Factual Claim
+            </button>
+            <button
+              onClick={() => addNewNode('policy')}
+              style={{ background: '#22c55e', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 0', fontWeight: 600, fontSize: '1rem', marginBottom: 4, cursor: 'pointer', transition: 'background 0.2s' }}
+              onMouseOver={e => (e.currentTarget.style.background = '#16a34a')}
+              onMouseOut={e => (e.currentTarget.style.background = '#22c55e')}
+            >
+              Add Policy Claim
+            </button>
+            <button
+              onClick={() => addNewNode('value')}
+              style={{ background: '#a21caf', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 0', fontWeight: 600, fontSize: '1rem', marginBottom: 4, cursor: 'pointer', transition: 'background 0.2s' }}
+              onMouseOver={e => (e.currentTarget.style.background = '#701a75')}
+              onMouseOut={e => (e.currentTarget.style.background = '#a21caf')}
+            >
+              Add Value Claim
+            </button>
+            {selectedNode && (
+              <button
+                onClick={deleteSelectedNode}
+                style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: 6, padding: '10px 0', fontWeight: 600, fontSize: '1rem', marginBottom: 4, cursor: 'pointer', transition: 'background 0.2s' }}
+                onMouseOver={e => (e.currentTarget.style.background = '#b91c1c')}
+                onMouseOut={e => (e.currentTarget.style.background = '#ef4444')}
+              >
+                Delete Selected Node
+              </button>
+            )}
+          </div>
+        </div>
+        {/* Node Details section, only if a node is selected */}
         {selectedNode && (
-          <button
-            onClick={deleteSelectedNode}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Delete Selected Node
-          </button>
+          <div style={{ marginTop: 24 }}>
+            <h2 style={{ fontWeight: 700, fontSize: '1.2rem', marginBottom: 16, color: '#c7d2fe' }}>Node Details</h2>
+            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Text
+              <input
+                type="text"
+                value={selectedNode.data.text}
+                onChange={e => {
+                  const event = new CustomEvent('nodeUpdate', {
+                    detail: { id: selectedNode.id, field: 'text', value: e.target.value }
+                  });
+                  window.dispatchEvent(event);
+                }}
+                style={{ width: '100%', marginTop: 4, marginBottom: 16, padding: 8, borderRadius: 6, border: '1px solid #475569', background: '#181829', color: '#fff', fontSize: '1rem' }}
+              />
+            </label>
+            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Type
+              <select
+                value={selectedNode.data.type}
+                onChange={e => {
+                  const event = new CustomEvent('nodeUpdate', {
+                    detail: { id: selectedNode.id, field: 'type', value: e.target.value }
+                  });
+                  window.dispatchEvent(event);
+                }}
+                style={{ width: '100%', marginTop: 4, marginBottom: 16, padding: 8, borderRadius: 6, border: '1px solid #475569', background: '#181829', color: '#fff', fontSize: '1rem' }}
+              >
+                <option value="factual">Factual</option>
+                <option value="policy">Policy</option>
+                <option value="value">Value</option>
+              </select>
+            </label>
+            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Belief
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={selectedNode.data.belief !== null ? selectedNode.data.belief * 100 : 50}
+                onChange={e => {
+                  const event = new CustomEvent('nodeUpdate', {
+                    detail: { id: selectedNode.id, field: 'belief', value: parseInt(e.target.value) / 100 }
+                  });
+                  window.dispatchEvent(event);
+                }}
+                style={{ width: '100%' }}
+              />
+              <div style={{ fontSize: '0.95em', textAlign: 'right', color: '#c7d2fe' }}>{selectedNode.data.belief !== null ? Math.round(selectedNode.data.belief * 100) : 50}%</div>
+            </label>
+            <label style={{ fontWeight: 600, color: '#fff', display: 'block', marginBottom: 10 }}>Author
+              <input
+                type="text"
+                value={selectedNode.data.author}
+                onChange={e => {
+                  const event = new CustomEvent('nodeUpdate', {
+                    detail: { id: selectedNode.id, field: 'author', value: e.target.value }
+                  });
+                  window.dispatchEvent(event);
+                }}
+                style={{ width: '100%', marginTop: 4, marginBottom: 16, padding: 8, borderRadius: 6, border: '1px solid #475569', background: '#181829', color: '#fff', fontSize: '1rem' }}
+              />
+            </label>
+            <div style={{ fontSize: '0.95em', color: '#a5b4fc', marginTop: 8 }}>
+              Created: {new Date(selectedNode.data.createdAt).toLocaleString()}
+            </div>
+          </div>
         )}
       </div>
+
+      {/* Remove floating button bar from canvas */}
 
       <ReactFlow
         nodes={nodes}
